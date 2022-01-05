@@ -48,8 +48,8 @@ def create_bigquery_client(
             credentials = service_account.Credentials.from_service_account_file(
                 credentials_path
             )
-        credentials = credentials.with_scopes(SCOPES)
-        default_project = credentials.project_id
+            credentials = credentials.with_scopes(SCOPES)
+            default_project = credentials.project_id
     elif credentials_info:
         credentials = service_account.Credentials.from_service_account_info(
             credentials_info
