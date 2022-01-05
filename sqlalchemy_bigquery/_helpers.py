@@ -12,6 +12,7 @@ import google.auth
 from google.cloud import bigquery
 from google.oauth2 import service_account
 import sqlalchemy
+import pydata_google_auth   # 2022/01/05:Add
 
 
 USER_AGENT_TEMPLATE = "sqlalchemy/{}"
@@ -29,6 +30,7 @@ def google_client_info():
 
 def create_bigquery_client(
     credentials_info=None,
+    credentials_type="service", # 2022/01/05:Add
     credentials_path=None,
     default_query_job_config=None,
     location=None,
@@ -37,9 +39,15 @@ def create_bigquery_client(
     default_project = None
 
     if credentials_path:
-        credentials = service_account.Credentials.from_service_account_file(
-            credentials_path
-        )
+        # 2022/01/05:Add
+        if credentials_type == "user":
+            credentials = pydata_google_auth.load_user_credentials(
+                credentials_path
+            )
+        else:
+            credentials = service_account.Credentials.from_service_account_file(
+                credentials_path
+            )
         credentials = credentials.with_scopes(SCOPES)
         default_project = credentials.project_id
     elif credentials_info:

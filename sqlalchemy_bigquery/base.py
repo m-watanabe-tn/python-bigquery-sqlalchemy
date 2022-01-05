@@ -750,6 +750,7 @@ class BigQueryDialect(DefaultDialect):
     def __init__(
         self,
         arraysize=5000,
+        credentials_type="service", # 2022/01/05:Add
         credentials_path=None,
         location=None,
         credentials_info=None,
@@ -759,6 +760,7 @@ class BigQueryDialect(DefaultDialect):
     ):
         super(BigQueryDialect, self).__init__(*args, **kwargs)
         self.arraysize = arraysize
+        self.credentials_type = credentials_type    # 2022/01/05:Add
         self.credentials_path = credentials_path
         self.credentials_info = credentials_info
         self.location = location
@@ -790,6 +792,7 @@ class BigQueryDialect(DefaultDialect):
             location,
             dataset_id,
             arraysize,
+            credentials_type,   # 2022/01/05:Add
             credentials_path,
             default_query_job_config,
             list_tables_page_size,
@@ -798,12 +801,14 @@ class BigQueryDialect(DefaultDialect):
         self.arraysize = arraysize or self.arraysize
         self.list_tables_page_size = list_tables_page_size or self.list_tables_page_size
         self.location = location or self.location
+        self.credentials_type = credentials_type or self.credentials_type   # 2022/01/05:Add
         self.credentials_path = credentials_path or self.credentials_path
         self.dataset_id = dataset_id
         self._add_default_dataset_to_job_config(
             default_query_job_config, project_id, dataset_id
         )
         client = _helpers.create_bigquery_client(
+            credentials_type=self.credentials_type, # 2022/01/05:Add
             credentials_path=self.credentials_path,
             credentials_info=self.credentials_info,
             project_id=project_id,

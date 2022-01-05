@@ -92,6 +92,7 @@ setup(
         # https://github.com/googleapis/python-bigquery-sqlalchemy/issues/385
         "sqlalchemy>=1.2.0,<=1.4.25",
         "future",
+        "pydata_google_auth",   # 2022/01/05:Add
     ],
     extras_require=extras,
     python_requires=">=3.6, <3.11",
